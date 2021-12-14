@@ -1,1 +1,1 @@
-web: sh APP_ENV=production build/install/app/bin/app
+web: sh build/install/app/bin/app $APP_ENV=production
