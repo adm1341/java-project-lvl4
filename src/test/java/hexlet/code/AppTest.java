@@ -1,9 +1,7 @@
 package hexlet.code;
 
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Test;
+import hexlet.code.domain.Url;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,7 +9,13 @@ import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 import io.javalin.Javalin;
 import io.ebean.Transaction;
-
+import io.ebean.DB;
+import hexlet.code.domain.query.QUrl;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 class AppTest {
 
@@ -23,6 +27,16 @@ class AppTest {
     private static Javalin app;
     private static String baseUrl;
     private static Transaction transaction;
+
+    @BeforeEach
+    void beforeEach() {
+        transaction = DB.beginTransaction();
+    }
+
+    @AfterEach
+    void afterEach() {
+        transaction.rollback();
+    }
 
     @BeforeAll
     public static void beforeAll() {
@@ -42,7 +56,35 @@ class AppTest {
     void testIndex() {
         HttpResponse<String> response = Unirest.get(baseUrl).asString();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(response.getBody()).contains("Hello World");
     }
 
+    @Test
+    void testCreate() {
+        String inputName = "https://github.com";
+        HttpResponse<String> responsePost = Unirest
+                .post(baseUrl + "/urls")
+                .field("url", inputName)
+                .asEmpty();
+
+        HttpResponse<String> response = Unirest
+                .get(baseUrl + "/urls")
+                .asString();
+
+        assertThat(response.getStatus()).isEqualTo(200);
+
+        Url actualurl = new QUrl()
+                .name.equalTo(inputName)
+                .findOne();
+
+        assertThat(actualurl).isNotNull();
+        assertThat(actualurl.getName()).isEqualTo(inputName);
+    }
+
+    @Test
+    void testIndexUrls() {
+        HttpResponse<String> response = Unirest
+                .get(baseUrl + "/urls")
+                .asString();
+        assertThat(response.getStatus()).isEqualTo(200);
+    }
 }

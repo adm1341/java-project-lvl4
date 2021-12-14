@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Страницы</title>
+    <link rel='stylesheet' href='/webjars/bootstrap/5.1.1/css/bootstrap.min.css'>
+    <script src="/webjars/bootstrap/5.1.0/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+<section>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th class="col-1">ID</th>
+            <th class="col-3">Название</th>
+            <th class="col-2">Дата создания</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="url : ${urls}" th:object="${url}">
+            <td th:text="*{getId()}"></td>
+            <td>
+                <a th:href="@{/urls/{id}(id=*{getId()})}" th:text="${#strings.abbreviate(url.getName(), 30)}"></a>
+            </td>
+            <td th:text="${#temporals.format(url.getCreatedAt(), 'dd/MM/yyyy HH:mm')}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation" th:if="${#lists.size(pages)}">
+        <ul class="pagination justify-content-center mt-5">
+            <li th:class="'page-item' + ${currentPage <= 1 ? ' disabled' : ''}">
+                <a class="page-link" th:href="@{/urls(page=${currentPage - 1})}">Previous</a>
+            </li>
+            <li th:each="page : ${pages}" th:class="'page-item' + ${currentPage == page ? ' active' : ''}">
+                <a class="page-link" th:href="@{/urls(page=${page})}" th:text="${page}"></a>
+            </li>
+            <li th:class="'page-item' + ${currentPage >= #lists.size(pages) ? ' disabled' : ''}">
+                <a class="page-link" th:href="@{/urls(page=${currentPage + 1})}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</section>
+
+</body>
+</html>
