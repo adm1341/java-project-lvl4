@@ -27,6 +27,7 @@ class AppTest {
     private static Javalin app;
     private static String baseUrl;
     private static Transaction transaction;
+    private static Url existingUrl;
 
     @BeforeEach
     void beforeEach() {
@@ -44,6 +45,8 @@ class AppTest {
         app.start(0);
         int port = app.port();
         baseUrl = "http://localhost:" + port;
+        existingUrl = new Url("https://github.com");
+        existingUrl.save();
     }
 
     @AfterAll
@@ -85,6 +88,8 @@ class AppTest {
         HttpResponse<String> response = Unirest
                 .get(baseUrl + "/urls")
                 .asString();
+        String body = response.getBody();
+        assertThat(body).contains(existingUrl.getName());
         assertThat(response.getStatus()).isEqualTo(200);
     }
 }
