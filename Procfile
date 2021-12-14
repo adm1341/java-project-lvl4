@@ -1,1 +1,1 @@
-web: sh build/install/app/bin/app
+web: sh build/install/app/bin/app -DAPP_ENV=production
