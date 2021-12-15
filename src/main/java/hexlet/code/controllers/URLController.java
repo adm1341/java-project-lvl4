@@ -77,7 +77,7 @@ public class URLController {
             ctx.sessionAttribute("flash", "Страница уже существует");
             ctx.sessionAttribute("flash-type", "danger");
             ctx.attribute("url", urlString);
-            ctx.render("index.html");
+            ctx.redirect("/");
             return;
         }
         Url url = new Url(normalUrlString);
@@ -85,7 +85,7 @@ public class URLController {
 
         ctx.sessionAttribute("flash", "Страница успешно добавлена");
         ctx.sessionAttribute("flash-type", "success");
-        ctx.render("index.html");
+        ctx.redirect("/urls");
     };
     public static Handler showUrl = ctx -> {
         int id = ctx.pathParamAsClass("id", Integer.class).getOrDefault(null);
