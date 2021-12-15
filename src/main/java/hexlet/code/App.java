@@ -44,6 +44,7 @@ public class App {
                 post(URLController.createUrl);
                 path("{id}", () -> {
                     get(URLController.showUrl);
+                    post("/checks", URLController.checkUrl);
                 });
             });
         });
