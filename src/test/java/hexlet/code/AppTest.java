@@ -100,6 +100,14 @@ class AppTest {
     }
 
     @Test
+    void testIncorrectShowId() {
+        HttpResponse<String> response = Unirest
+                .get(baseUrl + "/urls/100")
+                .asString();
+        assertThat(response.getStatus()).isEqualTo(404);
+    }
+
+    @Test
     void testIndexUrls() {
         HttpResponse<String> response = Unirest
                 .get(baseUrl + "/urls")

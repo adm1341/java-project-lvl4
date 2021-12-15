@@ -37,10 +37,6 @@ public final class UrlCheck extends Model {
         this.url = url;
     }
 
-    public Url getUrl() {
-        return url;
-    }
-
     public Instant getCreatedAt() {
         return createdAt;
     }
