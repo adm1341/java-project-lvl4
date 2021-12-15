@@ -30,9 +30,9 @@
         <tr th:each="urlCheck : ${urlChecks}" th:object="${urlCheck}">
             <td th:text="*{getId()}">ID</td>
             <td th:text="*{getStatusCode()}">200</td>
-            <td th:text="${#strings.abbreviate(urlCheck.getTitle(), 20)}">title</td>
-            <td th:text="${#strings.abbreviate(urlCheck.getH1(), 20)}">h1</td>
-            <td th:text="${#strings.abbreviate(urlCheck.getDescription(), 50)}">description</td>
+            <td th:text="${#strings.abbreviate(urlCheck.getTitle(), 50)}">title</td>
+            <td th:text="${#strings.abbreviate(urlCheck.getH1(), 50)}">h1</td>
+            <td th:text="${#strings.abbreviate(urlCheck.getDescription(), 150)}">description</td>
             <td th:text="${#temporals.format(urlCheck.getCreatedAt(), 'dd/MM/yyyy HH:mm')}">Дата создания</td>
         </tr>
         </tbody>
