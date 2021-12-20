@@ -42,7 +42,6 @@ public class URLController {
                 .collect(Collectors.toList());
 
 
-
         ctx.attribute("urls", urls);
         ctx.attribute("pages", pages);
         ctx.attribute("currentPage", currentPage);
@@ -61,14 +60,7 @@ public class URLController {
             ctx.render("index.html");
             return;
         }
-        String normalUrlString;
-        if (urlObject.getPort() == -1) {
-            normalUrlString = urlObject.getProtocol() + "://" + urlObject.getHost();
-        } else {
-            normalUrlString = urlObject.getProtocol() + "://" + urlObject.getHost() + ":" + urlObject.getPort();
-        }
-
-
+        String normalUrlString = getNormalizedUrl(urlObject);
         Url urlSearch = new QUrl()
                 .name.equalTo(normalUrlString)
                 .findOne();
@@ -108,6 +100,17 @@ public class URLController {
         ctx.attribute("url", url);
         ctx.render("urls/show.html");
     };
+
+    private static String getNormalizedUrl(URL urlObject) {
+        String normalizedUrl;
+        if (urlObject.getPort() == -1) {
+            normalizedUrl = urlObject.getProtocol() + "://" + urlObject.getHost();
+        } else {
+            normalizedUrl = urlObject.getProtocol() + "://" + urlObject.getHost() + ":" + urlObject.getPort();
+        }
+        return normalizedUrl;
+    }
+
     public static Handler checkUrl = ctx -> {
         long id = ctx.pathParamAsClass("id", Long.class).getOrDefault(null);
 
